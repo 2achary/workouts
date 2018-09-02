@@ -111,6 +111,7 @@ def new_set_from_existing(request):
             workout_id=workout_id)
     else:
         new_set = ExerciseSet(
+            date_created=datetime.datetime.utcnow(),
             exercise_id=exercise_id,
             set_number=1,
             workout_id=workout_id)

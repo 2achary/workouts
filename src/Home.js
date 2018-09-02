@@ -1,6 +1,6 @@
 import React from 'react';
 
-class App extends React.Component {
+class Home extends React.Component {
   state = {
     exercises: [],
     workouts: [],
@@ -60,40 +60,12 @@ class App extends React.Component {
   render() {
     return (
         <div className="">
-          <form onSubmit={this.createNewSet}>
-            <div>
-              <label htmlFor="workouts">Select Workout</label>
-              <select name="workouts" id="workouts" ref={this.workoutRef}>
-                {
-                  this.state.workouts.map((workout) => {
-                    return (<option key={workout.id}
-                        value={workout.id}>{new Date(workout.date_created).toDateString() + " - " + workout.name}</option>)
-                  })
-                }
-              </select>
-            </div>
-            <div>
-              <label htmlFor="exercises">Select Exercise</label>
-              <select name="exercies" id="exercises" ref={this.exerciseRef}>
-                {
-                  this.state.exercises.map((exercise) => {
-                    return (
-                        <option key={exercise.id} value={exercise.id}>{exercise.name}</option>)
-                  })
-                }
-              </select>
-            </div>
-            <button className="btn btn btn-outline-dark btn-sm" type="submit">Create New
-            </button>
-          </form>
-            <ul>
-              {this.state.sets.map((set) => {
-                return (<li key={set.id}>{set.actual_reps} + " x " + {set.weight}</li>)
-              })}
-            </ul>
+          <h3>Start Workout</h3>
+          <p className="text-muted text-uppercase">Quick Start</p>
+          <a href={"/empty_workout"}><button className={"btn btn-sm btn-primary btn-block"}>Start an Empty Workout</button></a>
         </div>
     );
   }
 }
 
-export default App;
+export default Home;
