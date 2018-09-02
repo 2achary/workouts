@@ -1,8 +1,21 @@
 import React from 'react';
+// import {Inplace} from 'primereact/inplace';
+// import {} from 'primereact/inplace'
+import {
+  Inplace,
+  InplaceContent,
+  InplaceDisplay
+} from "primereact/components/inplace/Inplace";
+import {InputText} from 'primereact/inputtext';
+import {Dialog} from "primereact/components/dialog/Dialog";
+import {Button} from "primereact/components/button/Button";
+import {AutoComplete} from "primereact/components/autocomplete/AutoComplete";
 
 class EmptyWorkout extends React.Component {
   state = {
     exercises: [],
+    exercise: {},
+    filteredExercisesSingle: [],
     workouts: [],
     sets: []
   };
@@ -56,38 +69,48 @@ class EmptyWorkout extends React.Component {
 
   };
 
+  filterExerciseSingle = (event) => {
+        setTimeout(() => {
+            var results = this.state.exercises.filter((exercise) => {
+                return exercise.name.toLowerCase().startsWith(event.query.toLowerCase());
+            });
+            this.setState({ filteredExercisesSingle: results });
+        }, 250);
+    }
+
 
   render() {
     return (
         <div className="empty-workout-container">
-          <h3>New Workout</h3>
-          <div>
-            <textarea placeholder={"Notes"}></textarea>
-          </div>
-
-          <button className={"btn btn-sm btn-primary btn-block"} data-toggle="modal" data-target="#exampleModal">Add Exercise</button>
-
-          <button className={"btn btn-sm btn-danger btn-block"} >Cancel Workout</button>
-
-          <div className={"modal fade"} id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div className={"modal-dialog"} role="document">
-              <div className={"modal-content"}>
-                <div className={"modal-header"}>
-                  <h5 className={"modal-title"} id="exampleModalLabel">Modal title</h5>
-                  <button type="button" className={"close"} data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div className={"modal-body"}>
-                  ...
-                </div>
-                <div className={"modal-footer"}>
-                  <button type="button" className={"btn btn-secondary"} data-dismiss="modal">Close</button>
-                  <button type="button" className={"btn btn-primary"}>Save changes</button>
-                </div>
-              </div>
+          <div className="workout-container">
+            <Inplace closable={true}>
+              <InplaceDisplay>
+                New Workout
+              </InplaceDisplay>
+              <InplaceContent>
+                <InputText value={"New Workout"}/>
+              </InplaceContent>
+            </Inplace>
+            <div>
+              <textarea placeholder={"Notes"}></textarea>
             </div>
-          </div>
+
+            <button className={"btn btn-sm btn-primary btn-block"} onClick={(e) => this.setState({visible: true})}>Add Exercise</button>
+
+            <button className={"btn btn-sm btn-danger btn-block"} >Cancel Workout</button>
+
+            </div>
+          <Dialog header="Choose Exercise" visible={this.state.visible}
+                  width="350px" modal={true}
+                  onHide={(e) => this.setState({visible: false})} positionTop={0}>
+            <AutoComplete value={""}
+                          suggestions={this.state.filteredExercisesSingle}
+                          completeMethod={this.filterExerciseSingle}
+                          field="name"
+                          size={30} placeholder="Choose Exercise" minLength={1}
+                          onChange={(e) => this.setState({exercise: e.value})}/>
+          </Dialog>
+
         </div>
     );
   }
