@@ -50,6 +50,17 @@ class ExerciseSetList(generics.ListCreateAPIView):
     queryset = ExerciseSet.objects.all()
     serializer_class = ExerciseSetSerializer
 
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = ExerciseSet.objects.all()
+        workout_id = self.request.query_params.get('workout_id', None)
+        if workout_id is not None:
+            queryset = queryset.filter(workout_id=workout_id)
+        return queryset
+
 
 class ExerciseSetDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = ExerciseSet.objects.all()
@@ -114,7 +125,10 @@ def new_set_from_existing(request):
             date_created=datetime.datetime.utcnow(),
             exercise_id=exercise_id,
             set_number=1,
-            workout_id=workout_id)
+            workout_id=workout_id,
+            is_warm_up=False,
+            is_completed=False
+        )
     new_set.save()
     return HttpResponse(json.dumps(ExerciseSetSerializer(new_set).data))
 

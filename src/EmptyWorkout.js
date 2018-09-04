@@ -10,13 +10,15 @@ import {InputText} from 'primereact/inputtext';
 import {Dialog} from "primereact/components/dialog/Dialog";
 import {Button} from "primereact/components/button/Button";
 import {AutoComplete} from "primereact/components/autocomplete/AutoComplete";
+import ExerciseSetManager from "./ExerciseSetManager";
+import {sendApiRequest, API_URL} from "./helpers";
 
 class EmptyWorkout extends React.Component {
   state = {
     exercises: [],
     exercise: {},
     filteredExercisesSingle: [],
-    workouts: [],
+    workout: {},
     sets: []
   };
 
@@ -24,17 +26,44 @@ class EmptyWorkout extends React.Component {
   exerciseRef = React.createRef();
 
   componentDidMount() {
-    fetch(`http://localhost:8000/api/exercises/`)
-        .then(r => r.json())
-        .then(exercises => {
-          this.setState({exercises: exercises})
-        });
-    fetch(`http://localhost:8000/api/workouts/`)
-        .then(r => r.json())
-        .then(workouts => {
-          this.setState({workouts});
-        });
+    this.getExercises();
+    this.createNewWorkout();
   }
+
+  getExercises = () => {
+    sendApiRequest(
+        `${API_URL}exercises/`,
+        null,
+        'GET',
+        (exercises) => {
+          this.setState({exercises})
+        }
+    );
+  };
+
+  createNewWorkout = () => {
+    let newWorkoutPostBody = {
+      name: 'New Workout',
+      is_routine: false,
+    };
+    sendApiRequest(
+        `${API_URL}workouts/`,
+        newWorkoutPostBody,
+        'POST',
+        (workout) => {console.log(workout); this.setState({workout})
+    });
+  };
+
+  getExerciseSets = () => {
+    sendApiRequest(
+        `${API_URL}exercise-sets/?workout_id=${this.state.workout.id}`,
+        null,
+        'GET',
+        (sets) => {
+          this.setState({sets})
+        }
+    )
+  };
 
   componentDidUpdate() {
   }
@@ -42,42 +71,35 @@ class EmptyWorkout extends React.Component {
   componentWillUnmount() {
   }
 
-  createNewSet = (event) => {
+  createNewSet = () => {
     let body;
-    event.preventDefault();
-    console.log(this.exerciseRef.current.value);
-    console.log(this.workoutRef);
-    body = {
-      exercise_id: this.exerciseRef.current.value,
-      workout_id: this.workoutRef.current.value,
-    };
-    console.log(body);
-    fetch(`http://localhost:8000/api/new-set-from-existing/`, {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(body)
-    })
-        .then(r => r.json())
-        .then(set => {
-          this.setState(prevState => ({
-            sets: [...prevState.sets, set]
-          }));
-        });
-    event.currentTarget.reset();
 
+    body = {
+      exercise_id: this.state.exercise.id,
+      workout_id: this.state.workout.id,
+    };
+
+    sendApiRequest(
+        `${API_URL}new-set-from-existing/`,
+        body,
+        'POST',
+        this.getExerciseSets
+    );
   };
 
   filterExerciseSingle = (event) => {
-        setTimeout(() => {
-            var results = this.state.exercises.filter((exercise) => {
-                return exercise.name.toLowerCase().startsWith(event.query.toLowerCase());
-            });
-            this.setState({ filteredExercisesSingle: results });
-        }, 250);
-    }
+    setTimeout(() => {
+      let results = this.state.exercises.filter((exercise) => {
+        return exercise.name.toLowerCase().startsWith(event.query.toLowerCase());
+      });
+      this.setState({filteredExercisesSingle: results});
+    }, 250);
+  };
 
+  onAddExercise = () => {
+    this.createNewSet();
+    this.state.visible = false;
+  };
 
   render() {
     return (
@@ -94,21 +116,26 @@ class EmptyWorkout extends React.Component {
             <div>
               <textarea placeholder={"Notes"}></textarea>
             </div>
+            {this.state.sets.map((set) => {
+              return (<ExerciseSetManager key={set.id} sets={this.state.sets}></ExerciseSetManager>)
+            })}
 
             <button className={"btn btn-sm btn-primary btn-block"} onClick={(e) => this.setState({visible: true})}>Add Exercise</button>
 
             <button className={"btn btn-sm btn-danger btn-block"} >Cancel Workout</button>
 
             </div>
-          <Dialog header="Choose Exercise" visible={this.state.visible}
+          <Dialog className={"add-exercise-dialog"} header="Choose Exercise" visible={this.state.visible}
                   width="350px" modal={true}
                   onHide={(e) => this.setState({visible: false})} positionTop={0}>
             <AutoComplete value={""}
+                          className={"filter-exercise-dialog"}
                           suggestions={this.state.filteredExercisesSingle}
                           completeMethod={this.filterExerciseSingle}
                           field="name"
                           size={30} placeholder="Choose Exercise" minLength={1}
                           onChange={(e) => this.setState({exercise: e.value})}/>
+            <button className={"btn btn-sm btn-primary"} onClick={this.onAddExercise}>Add Exercise</button>
           </Dialog>
 
         </div>
