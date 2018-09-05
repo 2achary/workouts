@@ -41,6 +41,19 @@ class ExerciseSet(models.Model):
     workout = models.ForeignKey(Workout, on_delete=models.CASCADE, null=True)
     notes = models.TextField(null=True, blank=True)
 
+    @property
+    def most_recent(self):
+        most_recent = ExerciseSet.objects.filter(
+            workout_id=self.workout_id, is_warm_up=False, is_completed=True,
+            exercise=self.exercise_id).order_by('-date_completed').all()
+
+        if most_recent:
+            most_recent = most_recent[0]
+            return f'{round(most_recent.weight)} lbs x {most_recent.actual_reps}'
+        else:
+            return '-'
+
+
     def __str__(self):
         return f'{self.date_created.date().isoformat() if self.date_created else ""} - {self.exercise.name}, Set {self.set_number or 0}: {self.weight or 0} x {self.actual_reps or 0}'
 

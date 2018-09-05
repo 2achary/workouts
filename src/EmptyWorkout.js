@@ -60,7 +60,7 @@ class EmptyWorkout extends React.Component {
         null,
         'GET',
         (sets) => {
-          this.setState({sets})
+          this.setState({sets});
         }
     )
   };
@@ -120,7 +120,8 @@ class EmptyWorkout extends React.Component {
               return (<ExerciseSetManager key={set.id} sets={this.state.sets}></ExerciseSetManager>)
             })}
 
-            <button className={"btn btn-sm btn-primary btn-block"} onClick={(e) => this.setState({visible: true})}>Add Exercise</button>
+            <button className={"btn btn-sm btn-primary btn-block"} onClick={(e) => {this.setState({visible: true});
+            }}>Add Exercise</button>
 
             <button className={"btn btn-sm btn-danger btn-block"} >Cancel Workout</button>
 
@@ -129,12 +130,15 @@ class EmptyWorkout extends React.Component {
                   width="350px" modal={true}
                   onHide={(e) => this.setState({visible: false})} positionTop={0}>
             <AutoComplete value={""}
+                          dropdown={true}
                           className={"filter-exercise-dialog"}
                           suggestions={this.state.filteredExercisesSingle}
                           completeMethod={this.filterExerciseSingle}
                           field="name"
                           size={30} placeholder="Choose Exercise" minLength={1}
-                          onChange={(e) => this.setState({exercise: e.value})}/>
+                          onChange={(e) => {
+                            this.setState({exercise: e.value})
+                          }}/>
             <button className={"btn btn-sm btn-primary"} onClick={this.onAddExercise}>Add Exercise</button>
           </Dialog>
 

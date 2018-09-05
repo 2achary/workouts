@@ -22,6 +22,7 @@ class ExerciseSerializer(serializers.ModelSerializer):
 
 
 class ExerciseSetSerializer(serializers.ModelSerializer):
+    most_recent = serializers.ReadOnlyField()
     class Meta:
         model = ExerciseSet
         fields = (
@@ -36,7 +37,9 @@ class ExerciseSetSerializer(serializers.ModelSerializer):
             'is_warm_up',
             'is_completed',
             'workout',
-            'notes',)
+            'notes',
+            'most_recent'
+        )
 
 
 class MuscleGroupSerializer(serializers.ModelSerializer):

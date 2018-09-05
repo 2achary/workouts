@@ -84,7 +84,8 @@ class ExerciseSetManager extends React.Component {
         <div className="empty-workout-container">
           <p>
             {this.props.sets.map((set) => {
-              return (`${set.workout_id} - ${set.weight} x ${set.actual_reps} `);
+              console.log(set)
+              return (`${set.set_number} - ${set.weight || 0} x ${set.actual_reps || set.goal_reps || 0} `);
             })}
           </p>
         </div>
