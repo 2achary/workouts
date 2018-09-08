@@ -16,3 +16,4 @@ export function sendApiRequest(url, body, verb, callback) {
   responsePromise = responsePromise.then(r => r.json());
   return responsePromise.then(callback);
 }
+

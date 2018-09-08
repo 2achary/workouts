@@ -1,3 +1,8 @@
+
+body {
+    max-width: 400px;
+    margin: 0 auto;
+}
 .empty-workout-container .p-inplace-content, .empty-workout-container .p-inplace-display {
     font-size: 2rem;
 }
@@ -17,6 +22,19 @@
 
 .add-exercise-dialog .filter-exercise-dialog {
     margin-bottom: 8px;
+}
+
+table {
+    font-size: 12px;
+}
+
+.add-set-button {
+    margin-bottom: 25px;
+    font-size: 10px;
+}
+
+.exercise-name {
+    font-size: 1rem;
 }
 
 @media only screen and (max-width: 576px) {

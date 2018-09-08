@@ -81,14 +81,80 @@ class ExerciseSetManager extends React.Component {
 
   render() {
     return (
-        <div className="empty-workout-container">
-          <p>
-            {this.props.sets.map((set) => {
-              console.log(set)
-              return (`${set.set_number} - ${set.weight || 0} x ${set.actual_reps || set.goal_reps || 0} `);
-            })}
-          </p>
-        </div>
+      <div>
+        <h4 className={"exercise-name"}>Incline Bench</h4>
+        <table className={"table table-borderless"}>
+          <thead className="">
+
+            <tr>
+              <th scope="col">Set</th>
+              <th scope="col">Previous</th>
+              <th scope="col">lbs</th>
+              <th scope="col">Reps</th>
+              <th scope="col">✔️</th>
+            </tr>
+
+            <tr>
+              <td>1</td>
+              <td>120 lbs x 6</td>
+              <td>125</td>
+              <td>4</td>
+              <td>
+                <div className={"form-check"}>
+                  <input className={"form-check-input"} type="checkbox" value=""
+                         id="defaultCheck1"/>
+                </div></td>
+            </tr>
+
+             <tr>
+              <td>1</td>
+              <td>125 lbs x 4</td>
+              <td>125</td>
+              <td>4</td>
+              <td>
+                <div className={"form-check"}>
+                  <input className={"form-check-input"}  type="checkbox"/>
+                </div>
+              </td>
+            </tr>
+
+          </thead>
+        </table>
+        <button className={"btn btn-sm btn-block btn-outline-primary add-set-button"}>Add Set</button>
+
+
+        <h4 className={"exercise-name"}>Incline Bench</h4>
+        <table className={"table table-borderless"}>
+          <thead className="">
+
+            <tr>
+              <th scope="col">Set</th>
+              <th scope="col">Previous</th>
+              <th scope="col">lbs</th>
+              <th scope="col">Reps</th>
+              <th scope="col">✔️</th>
+            </tr>
+
+            <tr>
+              <td>1</td>
+              <td>120 lbs x 6</td>
+              <td>125</td>
+              <td>4</td>
+              <td><input type="checkbox"/></td>
+            </tr>
+
+             <tr>
+              <td>1</td>
+              <td>125 lbs x 4</td>
+              <td>125</td>
+              <td>4</td>
+              <td><input type="checkbox"/></td>
+            </tr>
+
+          </thead>
+        </table>
+        <button className={"btn btn-sm btn-block btn-outline-primary add-set-button"}>Add Set</button>
+      </div>
     );
   }
 }

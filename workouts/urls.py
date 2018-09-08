@@ -18,6 +18,8 @@ from django.urls import path, re_path
 from django.conf.urls import url, include
 from django.views.generic import TemplateView
 from rest_framework import routers
+from rest_framework.authtoken.views import obtain_auth_token
+
 from journal import views
 
 
@@ -29,6 +31,12 @@ id_regex = r'(?P<pk>[0-9]+)'
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^api/', include(router.urls)),
+
+    url(r'^', include(router.urls)),
+    # url(r'^register/', register_view.register_user),
+    url(r'^api-token-auth/', obtain_auth_token),
+
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     re_path('^$', TemplateView.as_view(template_name='index.html')),
 
