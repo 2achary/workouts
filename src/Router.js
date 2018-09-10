@@ -5,14 +5,17 @@ import App from "./App";
 import NotFound from './NotFound';
 import EmptyWorkout from "./EmptyWorkout";
 import Login from "./Login";
+import {Landing} from './Landing';
 
 const Router = () => (
     <BrowserRouter>
       <Switch>
+        <Route exact path="/home" component={Landing}/>
         <Route exact path="/" component={Home}/>
         <Route path="/test_create" component={App}/>
         <Route path="/empty_workout" component={EmptyWorkout}/>
         <Route path="/login" component={Login}/>
+
         <Route component={NotFound}/>
       </Switch>
     </BrowserRouter>

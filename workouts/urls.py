@@ -18,9 +18,11 @@ from django.urls import path, re_path
 from django.conf.urls import url, include
 from django.views.generic import TemplateView
 from rest_framework import routers
+from django.conf.urls import include, url
 from rest_framework.authtoken.views import obtain_auth_token
 
 from journal import views
+from accounts import views as account_views
 
 
 router = routers.DefaultRouter()
@@ -30,11 +32,14 @@ id_regex = r'(?P<pk>[0-9]+)'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    url(r'^api/users/create-account', account_views.UserCreate.as_view()),
     url(r'^api/', include(router.urls)),
 
     url(r'^', include(router.urls)),
     # url(r'^register/', register_view.register_user),
     url(r'^api-token-auth/', obtain_auth_token),
+
+
 
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),

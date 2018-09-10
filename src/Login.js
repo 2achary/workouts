@@ -23,10 +23,10 @@ class Login extends React.Component {
   componentWillUnmount() {
   }
 
-  showError() {
+  showError(msg) {
     this.messages.show({
       severity: 'error',
-      summary: 'Error Message',
+      summary: JSON.stringify(msg) || 'Error Message',
       detail: 'Validation failed',
       sticky: true
     });
@@ -47,7 +47,7 @@ class Login extends React.Component {
             localStorage.setItem('api-token', JSON.stringify(response.token));
             this.setState({goHome: true});
           } else {
-            this.showError();
+            this.showError(response);
           }
 
         }

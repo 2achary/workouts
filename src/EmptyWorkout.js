@@ -12,14 +12,31 @@ import {Button} from "primereact/components/button/Button";
 import {AutoComplete} from "primereact/components/autocomplete/AutoComplete";
 import ExerciseSetManager from "./ExerciseSetManager";
 import {sendApiRequest, API_URL} from "./helpers";
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import RestoreIcon from '@material-ui/icons/Restore';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+
+const styles = {
+  root: {
+    width: '100%'
+  }
+};
 
 class EmptyWorkout extends React.Component {
-  state = {
+  state = {value: 0,
     exercises: [],
     exercise: {},
     filteredExercisesSingle: [],
     workout: {},
     sets: []
+  };
+
+  handleChange = (event, value) => {
+    this.setState({ value });
   };
 
   workoutRef = React.createRef();
@@ -102,6 +119,8 @@ class EmptyWorkout extends React.Component {
   };
 
   render() {
+    const { classes } = this.props;
+    const { value } = this.state;
     return (
         <div className="empty-workout-container">
           <div className="workout-container">
@@ -126,6 +145,17 @@ class EmptyWorkout extends React.Component {
             <button className={"btn btn-sm btn-danger btn-block"} >Cancel Workout</button>
 
             </div>
+
+          <BottomNavigation
+            value={value}
+            onChange={this.handleChange}
+            showLabels
+            className={classes.root}
+          >
+            <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
+            <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+            <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+          </BottomNavigation>
           <Dialog className={"add-exercise-dialog"} header="Choose Exercise" visible={this.state.visible}
                   width="350px" modal={true}
                   onHide={(e) => this.setState({visible: false})} positionTop={0}>
@@ -147,4 +177,6 @@ class EmptyWorkout extends React.Component {
   }
 }
 
-export default EmptyWorkout;
+// export default EmptyWorkout;
+
+export default withStyles(styles)(EmptyWorkout);

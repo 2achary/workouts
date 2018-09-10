@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'journal',
     'rest_framework',
     'corsheaders',
+    'accounts'
 ]
 
 MIDDLEWARE = [
